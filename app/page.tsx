@@ -1,101 +1,134 @@
+"use client"
+import { ArrowRight, CircleMinus, CirclePlus, ScrollText } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { ChangeEvent, useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [list, setList] = useState(['']);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+  const HandleAddField = () => {
+    setList([...list, '']);
+  }
+
+  const handleRemoveField = (index: number) => {
+    const listCopy = [...list];
+    listCopy.splice(index, 1);
+    setList(listCopy);
+  }
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const { value } = e.target;
+    const onChangeValue = [...list];
+    onChangeValue[index] = value;
+    setList(onChangeValue);
+  }
+
+  const sendValues = () => {
+    console.log(trimmedInputs);
+  }
+  
+  
+  const trimmedInputs = list.filter(value => value.length > 0);
+  const disableSend = trimmedInputs.length === 0;
+  const firstName = trimmedInputs[0];
+
+  return (
+    <>
+      <main className="flex flex-col gap-8 items-center justify-center">
+        <h1 className="text-3xl sm:text-6xl z-10">DKuarentando!</h1>
+
+        <div className="relative">
+          <Image
+            src="/dk_d.jpg"
+            alt="kid dk"
+            height={400}
+            width={300}
+            priority
+          />
+          <Image
+            className="absolute top-[3.8rem] left-[1.4rem] sm:top-20 sm:left-[2.7rem] animate-appear-up"
+            src="/beard.png"
+            alt="beard"
+            height={220}
+            width={220}
+          />
+          <Image
+            className="absolute bottom-3/4 -rotate-[30deg] animate-appear-up"
+            src="/hat.png"
+            alt="party hat"
+            height={180}
+            width={180}
+          />
+          <Image
+            className="hidden sm:block absolute bottom-3 -rotate-45 right-3/4 animate-balloons"
+            src="/balloons.png"
+            alt="balloons"
+            height={300}
+            width={300}
+          />
+          <Image
+            className="hidden sm:block absolute bottom-3 rotate-45 left-3/4 animate-40"
+            src="/balloon-40.png"
+            alt="balloon 40"
+            height={300}
+            width={300}
+          />
+        </div>
+
+        <div className="flex flex-col items-center justify-center">
+          <p className="font-bold">DK virou Quarentão!</p>
+          <p>Venha comemorar comigo no meu terceiro dia dos quarenta anos!</p>
+          <p>(pq é oficialmente dia 28, hahaha)</p>
+        </div>
+
+        <ul className="list-none text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
+          <li>
+            <strong>Quando?</strong> Dia 30/11/24 a partir das 13h até as 22h
+          </li>
+          <li>
+            <strong>Onde?</strong> Av. Otacílio Tomanik, 343 - Quiosque Principal
+          </li>
+          <li>
+            <strong>Posso levar alguém?</strong> Sim! Não quero limitar, mas use o bom senso!
+          </li>
+          <li>
+            <strong>O que precisa?</strong> Algo que você queira beber e algo pra por na churrasqueira!
+          </li>
+        </ul>
+
+        <div className="flex items-center gap-3 flex-col">
+          <p className="font-bold">Confirme abaixo se vier:</p>
+          <p className="p-0 m-0 text-xs">para adicionar mais gente, clique no "+"!</p>
+          {list.map((name, index) => (
+            <div className="flex gap-3 w-full" key={index}>
+              <input className="p-2 rounded-md text-black" value={name} onChange={(e) => handleChange(e, index)}/>
+              {list.length > 1 && index < list.length - 1 && (
+                <button onClick={() => handleRemoveField(index)}><CircleMinus className="text-red-500" /></button>
+              )}
+              {index === list.length - 1 && (
+                <button onClick={HandleAddField}><CirclePlus /></button>
+              )}
+            </div>
+          ))}
+          <Link
+            className={`group rounded-full flex items-center gap-2 bg-foreground text-background py-2 px-4 ${disableSend ? 'pointer-events-none bg-gray-500' : ''}`}
+            aria-disabled={disableSend}
+            tabIndex={disableSend ? -1 : undefined}
+            onClick={sendValues}
+            href={`/obrigado?name=${firstName}`}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            Enviar <ArrowRight className="group-hover:translate-x-2 transition-all duration-300"/>
+          </Link>
+          
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      <footer className="flex items-center justify-center">
+        <Link className="flex gap-1 items-center" href="/lista">
+          <ScrollText size={16} /> Ver lista de quem confirmou <ArrowRight size={16} />
+        </Link>
       </footer>
-    </div>
+    </>
   );
 }
