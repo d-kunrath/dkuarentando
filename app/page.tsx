@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ChangeEvent, useState } from "react";
 import { createGuests } from "./lib/actions";
 import { Prisma } from "@prisma/client";
-import { redirect } from "next/navigation";
 import ObrigadoModal from "./obrigado";
 
 export default function Home() {

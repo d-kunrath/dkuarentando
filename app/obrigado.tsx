@@ -1,7 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { ScrollText, SquareX } from "lucide-react";
 import Link from "next/link";
-import React, { Dispatch, useState } from "react";
 
 type Props = {
     guests: Prisma.GuestCreateManyInput[];
