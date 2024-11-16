@@ -1,15 +1,19 @@
 "use client"
-import { ArrowRight, CircleMinus, CirclePlus, ScrollText } from "lucide-react";
+import { ArrowRight, CircleMinus, CirclePlus, ExternalLink, ScrollText } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChangeEvent, useState } from "react";
+import { createGuests } from "./lib/actions";
+import { Prisma } from "@prisma/client";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  const [list, setList] = useState(['']);
+  const [list, setList] = useState<Prisma.GuestCreateInput[]>([{ name: '' }]);
 
+  const addressLink = "https://www.google.com/maps/place/Av.+Otac%C3%ADlio+Tomanik,+343+-+Vila+Polopoli,+S%C3%A3o+Paulo+-+SP,+05363-000/@-23.576187,-46.7476803,17z/data=!3m1!4b1!4m6!3m5!1s0x94ce56779eff67df:0x97c93b277b43de91!8m2!3d-23.5761919!4d-46.7451054!16s%2Fg%2F11f_b__vv4?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D";
 
   const HandleAddField = () => {
-    setList([...list, '']);
+    setList([...list, { name: '' }]);
   }
 
   const handleRemoveField = (index: number) => {
@@ -21,18 +25,19 @@ export default function Home() {
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = e.target;
     const onChangeValue = [...list];
-    onChangeValue[index] = value;
+    onChangeValue[index] = { name: value };
     setList(onChangeValue);
   }
 
-  const sendValues = () => {
-    console.log(trimmedInputs);
+  const sendValues = async () => {
+    await createGuests(list);
+    redirect(`/obrigado?name=${firstName}`);
   }
   
   
-  const trimmedInputs = list.filter(value => value.length > 0);
+  const trimmedInputs = list.filter(value => value.name.length > 0);
   const disableSend = trimmedInputs.length === 0;
-  const firstName = trimmedInputs[0];
+  const firstName = trimmedInputs[0]?.name ?? '';
 
   return (
     <>
@@ -88,7 +93,7 @@ export default function Home() {
             <strong>Quando?</strong> Dia 30/11/24 a partir das 13h até as 22h
           </li>
           <li>
-            <strong>Onde?</strong> Av. Otacílio Tomanik, 343 - Quiosque Principal
+            <strong>Onde?</strong> <Link href={addressLink} target="_blank">Av. Otacílio Tomanik, 343 - Quiosque Principal <ExternalLink className="inline" size={12}/></Link>
           </li>
           <li>
             <strong>Posso levar alguém?</strong> Sim! Não quero limitar, mas use o bom senso!
@@ -101,9 +106,9 @@ export default function Home() {
         <div className="flex items-center gap-3 flex-col">
           <p className="font-bold">Confirme abaixo se vier:</p>
           <p className="p-0 m-0 text-xs">para adicionar mais gente, clique no &quot;+&quot;!</p>
-          {list.map((name, index) => (
+          {list.map((guest, index) => (
             <div className="flex gap-3 w-full" key={index}>
-              <input className="p-2 rounded-md text-black" value={name} onChange={(e) => handleChange(e, index)}/>
+              <input className="p-2 rounded-md text-black" value={guest.name} onChange={(e) => handleChange(e, index)}/>
               {list.length > 1 && index < list.length - 1 && (
                 <button onClick={() => handleRemoveField(index)}><CircleMinus className="text-red-500" /></button>
               )}
@@ -112,15 +117,14 @@ export default function Home() {
               )}
             </div>
           ))}
-          <Link
+          <button
             className={`group rounded-full flex items-center gap-2 bg-foreground text-background py-2 px-4 ${disableSend ? 'pointer-events-none bg-gray-500' : ''}`}
             aria-disabled={disableSend}
             tabIndex={disableSend ? -1 : undefined}
             onClick={sendValues}
-            href={`/obrigado?name=${firstName}`}
           >
             Enviar <ArrowRight className="group-hover:translate-x-2 transition-all duration-300"/>
-          </Link>
+          </button>
           
         </div>
       </main>
