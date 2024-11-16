@@ -2,8 +2,6 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation"
 
-const addressLink = "https://www.google.com/maps/place/Av.+Otac%C3%ADlio+Tomanik,+343+-+Vila+Polopoli,+S%C3%A3o+Paulo+-+SP,+05363-000/@-23.576187,-46.7476803,17z/data=!3m1!4b1!4m6!3m5!1s0x94ce56779eff67df:0x97c93b277b43de91!8m2!3d-23.5761919!4d-46.7451054!16s%2Fg%2F11f_b__vv4?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D";
-
 export default  function Confirmar() {
     const searchParams = useSearchParams();
 
