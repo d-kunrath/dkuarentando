@@ -100,7 +100,7 @@ export default function Home() {
 
         <div className="flex items-center gap-3 flex-col">
           <p className="font-bold">Confirme abaixo se vier:</p>
-          <p className="p-0 m-0 text-xs">para adicionar mais gente, clique no "+"!</p>
+          <p className="p-0 m-0 text-xs">para adicionar mais gente, clique no &quot;+&quot;!</p>
           {list.map((name, index) => (
             <div className="flex gap-3 w-full" key={index}>
               <input className="p-2 rounded-md text-black" value={name} onChange={(e) => handleChange(e, index)}/>
