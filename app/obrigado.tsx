@@ -1,11 +1,12 @@
 import { Prisma } from "@prisma/client";
 import { ScrollText, SquareX } from "lucide-react";
 import Link from "next/link";
+import { Dispatch, SetStateAction } from "react";
 
 type Props = {
     guests: Prisma.GuestCreateManyInput[];
     isOpen: boolean;
-    close: any;
+    close: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function ObrigadoModal({ guests, isOpen, close }: Props) {

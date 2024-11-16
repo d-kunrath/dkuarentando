@@ -38,7 +38,6 @@ export default function Home() {
   
   const trimmedInputs = list.filter(value => value.name.length > 0);
   const disableSend = trimmedInputs.length === 0;
-  const firstName = trimmedInputs[0]?.name ?? '';
 
   return (
     <>
