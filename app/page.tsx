@@ -6,9 +6,11 @@ import { ChangeEvent, useState } from "react";
 import { createGuests } from "./lib/actions";
 import { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
+import ObrigadoModal from "./obrigado";
 
 export default function Home() {
   const [list, setList] = useState<Prisma.GuestCreateInput[]>([{ name: '' }]);
+  const [openModal, setOpenModal] = useState(false);
 
   const addressLink = "https://www.google.com/maps/place/Av.+Otac%C3%ADlio+Tomanik,+343+-+Vila+Polopoli,+S%C3%A3o+Paulo+-+SP,+05363-000/@-23.576187,-46.7476803,17z/data=!3m1!4b1!4m6!3m5!1s0x94ce56779eff67df:0x97c93b277b43de91!8m2!3d-23.5761919!4d-46.7451054!16s%2Fg%2F11f_b__vv4?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D";
 
@@ -29,9 +31,9 @@ export default function Home() {
     setList(onChangeValue);
   }
 
-  const sendValues = async () => {
+  const sendName = async () => {
     await createGuests(list);
-    redirect(`/obrigado?name=${firstName}`);
+    setOpenModal(true);
   }
   
   
@@ -53,7 +55,7 @@ export default function Home() {
             priority
           />
           <Image
-            className="absolute top-[3.8rem] left-[1.4rem] sm:top-20 sm:left-[2.7rem] animate-appear-up"
+            className="absolute top-[21%] left-[14%] sm:top-20 sm:left-[2.7rem] animate-appear-up"
             src="/beard.png"
             alt="beard"
             height={220}
@@ -93,7 +95,7 @@ export default function Home() {
             <strong>Quando?</strong> Dia 30/11/24 a partir das 13h até as 22h
           </li>
           <li>
-            <strong>Onde?</strong> <Link href={addressLink} target="_blank">Av. Otacílio Tomanik, 343 - Quiosque Principal <ExternalLink className="inline" size={12}/></Link>
+            <strong>Onde?</strong> Av. Otacílio Tomanik, 343 - Quiosque Principal <Link href={addressLink} target="_blank">(mapa <ExternalLink className="inline" size={12}/>)</Link>
           </li>
           <li>
             <strong>Posso levar alguém?</strong> Sim! Não quero limitar, mas use o bom senso!
@@ -121,7 +123,7 @@ export default function Home() {
             className={`group rounded-full flex items-center gap-2 bg-foreground text-background py-2 px-4 ${disableSend ? 'pointer-events-none bg-gray-500' : ''}`}
             aria-disabled={disableSend}
             tabIndex={disableSend ? -1 : undefined}
-            onClick={sendValues}
+            onClick={sendName}
           >
             Enviar <ArrowRight className="group-hover:translate-x-2 transition-all duration-300"/>
           </button>
@@ -133,6 +135,7 @@ export default function Home() {
           <ScrollText size={16} /> Ver lista de quem confirmou <ArrowRight size={16} />
         </Link>
       </footer>
+      <ObrigadoModal guests={list} isOpen={openModal} close={() => setOpenModal(false)}/>
     </>
   );
 }
