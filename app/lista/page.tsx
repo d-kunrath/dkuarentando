@@ -11,12 +11,12 @@ export default async function Lista() {
     return <div className="flex flex-col gap-3 items-center">
         <header className="flex justify-center items-center w-full">
             <h1 className="text-4xl">CONFIRMADOS</h1>
-            <Link href="/" className="border rounded-full py-1 px-4 text-gray-900 absolute bg-slate-50 bottom-5 right-5">Voltar</Link>
+            <Link href="/" className="border rounded-full py-1 px-4 text-gray-900 fixed bg-slate-50 bottom-5 right-5">Voltar</Link>
         </header>
         <p className="text-xs">caso tenha algum erro entre em contato comigo!</p>
         <div className="flex flex-col flex-wrap">
-            {guestsByName.map(guest => (
-                <p key={guest.id}>{guest.name}</p>
+            {guestsByName.map((guest, index) => (
+                <p key={guest.id} style={{ backgroundColor: index % 2 === 0 ? '#0003' : 'transparent' }}>{guest.name}</p>
             ))}
         </div>
     </div>

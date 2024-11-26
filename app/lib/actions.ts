@@ -24,5 +24,16 @@ export async function fetchGuests() {
         throw error;
     }
 
-    revalidatePath('/lista');
+}
+
+export async function deleteGuest(id: string) {
+    try {
+        await prisma.guest.delete({ where: {
+            id
+        }});
+        revalidatePath('/delete');
+    } catch (error) {
+        throw error;
+    }
+
 }
